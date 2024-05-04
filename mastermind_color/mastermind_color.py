@@ -30,3 +30,48 @@ def guess_code():
             break
         
     return guess
+
+def check_code(guess, real_code):
+    color_counts = {
+        "G":2,
+    }
+    correct_pos = 0
+    incorrect_pos = 0
+    
+    for color in real_code:
+        if color not in color_counts:
+            color_counts[color] = 0
+        color_counts[color]+=1
+        
+    for guess_color, real_color in zip(guess,real_code):
+        if guess_color == real_color:
+            correct_pos +=1
+            color_counts[guess_color]-=1
+    
+    for guess_color, real_color in zip(guess,real_code):
+        if guess_color in color_counts and color_counts[guess_color]>0:
+            incorrect_pos+=1
+            color_counts[guess_code]-=1
+    
+    return correct_pos, incorrect_pos
+    
+def game():
+    print(f"Welcome to mastermind, you have {TRIES} to guess the code...")
+    print("The valid colors are,", *COLORS)
+    
+    code = generate_code()
+    for attemps in range(1,TRIES+1):
+        guess = guess_code()
+        correct_poz, incorrect_pos = check_code(guess,code)
+        
+        if correct_poz == CODE_LENGTH:
+            print("You guessed the code in {attemps} tries!")
+            break
+        
+        print(f"Correct Positions:{correct_poz} | Incorrect Positions: {incorrect_pos}")
+        
+    else:
+        print("You ran out of tries, the code was:", *code)
+        
+if __name__ == "__main__":
+    game()
